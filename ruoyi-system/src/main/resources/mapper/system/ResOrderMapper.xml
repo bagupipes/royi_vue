@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ResOrderMapper">
+    
+    <resultMap type="ResOrder" id="ResOrderResult">
+        <result property="id"    column="id"    />
+        <result property="orderNo"    column="order_no"    />
+        <result property="totalVisitors"    column="total_visitors"    />
+        <result property="contactName"    column="contact_name"    />
+        <result property="timeSlot"    column="time_slot"    />
+        <result property="contactIdcard"    column="contact_idcard"    />
+        <result property="visitDate"    column="visit_date"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectResOrderVo">
+        select id, order_no, total_visitors, contact_name, time_slot, contact_idcard, visit_date, status, create_time, update_time from res_order
+    </sql>
+
+    <select id="selectResOrderList" parameterType="ResOrder" resultMap="ResOrderResult">
+        <include refid="selectResOrderVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="orderNo != null  and orderNo != ''"> and order_no = #{orderNo}</if>
+            <if test="totalVisitors != null "> and total_visitors = #{totalVisitors}</if>
+            <if test="contactName != null  and contactName != ''"> and contact_name like concat('%', #{contactName}, '%')</if>
+            <if test="timeSlot != null "> and time_slot = #{timeSlot}</if>
+            <if test="contactIdcard != null  and contactIdcard != ''"> and contact_idcard = #{contactIdcard}</if>
+            <if test="visitDate != null "> and visit_date = #{visitDate}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectResOrderById" parameterType="Long" resultMap="ResOrderResult">
+        <include refid="selectResOrderVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertResOrder" parameterType="ResOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into res_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null">order_no,</if>
+            <if test="totalVisitors != null">total_visitors,</if>
+            <if test="contactName != null and contactName != ''">contact_name,</if>
+            <if test="timeSlot != null">time_slot,</if>
+            <if test="contactIdcard != null">contact_idcard,</if>
+            <if test="visitDate != null">visit_date,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null">#{orderNo},</if>
+            <if test="totalVisitors != null">#{totalVisitors},</if>
+            <if test="contactName != null and contactName != ''">#{contactName},</if>
+            <if test="timeSlot != null">#{timeSlot},</if>
+            <if test="contactIdcard != null">#{contactIdcard},</if>
+            <if test="visitDate != null">#{visitDate},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateResOrder" parameterType="ResOrder">
+        update res_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderNo != null">order_no = #{orderNo},</if>
+            <if test="totalVisitors != null">total_visitors = #{totalVisitors},</if>
+            <if test="contactName != null and contactName != ''">contact_name = #{contactName},</if>
+            <if test="timeSlot != null">time_slot = #{timeSlot},</if>
+            <if test="contactIdcard != null">contact_idcard = #{contactIdcard},</if>
+            <if test="visitDate != null">visit_date = #{visitDate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteResOrderById" parameterType="Long">
+        delete from res_order where id = #{id}
+    </delete>
+
+    <delete id="deleteResOrderByIds" parameterType="String">
+        delete from res_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
